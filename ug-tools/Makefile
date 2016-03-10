@@ -4,7 +4,7 @@ LIB   	:= -lsyndicate -lsyndicate-ug -lfskit -lprotobuf -lcurl
 C_SRCS	:= $(wildcard *.c)
 CXSRCS	:= $(wildcard *.cpp)
 
-OBJDIR  := obj/gateways/user/tools
+OBJDIR  := obj/
 OBJ		:= $(patsubst %.c,$(BUILD_UG_TOOLS)/%.o,$(C_SRCS)) \
 	       $(patsubst %.cpp,$(BUILD_UG_TOOLS)/%.o,$(CXSRCS))
 
