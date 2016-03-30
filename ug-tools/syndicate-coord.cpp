@@ -30,8 +30,8 @@ int main( int argc, char** argv ) {
    
    memset( &opts, 0, sizeof(tool_opts) );
    
-   rc = parse_args( argc, argv, &opts );
-   if( rc != 0 ) {
+   argc = parse_args( argc, argv, &opts );
+   if( argc < 0 ) {
       
       usage( argv[0], "file [file...]" );
       md_common_usage();

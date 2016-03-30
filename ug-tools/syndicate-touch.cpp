@@ -26,13 +26,16 @@ int main( int argc, char** argv ) {
    int path_optind = 0;
    mode_t um = umask(0);
    umask( um );
-   
+   int64_t* times = NULL;
+   struct timespec ts_begin;
+   struct timespec ts_end;
+
    struct tool_opts opts;
    
    memset( &opts, 0, sizeof(tool_opts) );
    
-   rc = parse_args( argc, argv, &opts );
-   if( rc != 0 ) {
+   argc = parse_args( argc, argv, &opts );
+   if( argc < 0 ) {
       
       usage( argv[0], "file [file...]" );
       md_common_usage();
@@ -57,13 +60,25 @@ int main( int argc, char** argv ) {
       UG_shutdown( ug );
       exit(1);
    }
+
+   if( opts.benchmark ) {
+      times = SG_CALLOC( int64_t, argc - path_optind + 1 );
+      if( times == NULL ) {
+          UG_shutdown( ug );
+          SG_error("%s", "Out of memory\n");
+          exit(1);
+      }
+   }
    
    for( int i = path_optind; i < argc; i++ ) {
         
        path = argv[ i ];
        
-       // try to create
+       // try to create 
+       clock_gettime( CLOCK_MONOTONIC, &ts_begin );
        UG_handle_t* fh = UG_create( ug, path, um & 0777, &rc );
+       clock_gettime( CLOCK_MONOTONIC, &ts_end );
+
        if( rc != 0 ) {
            
           if( rc != -EEXIST ) { 
@@ -97,9 +112,26 @@ int main( int argc, char** argv ) {
 
              fprintf(stderr, "Failed to close '%s': %s\n", path, strerror( abs(rc) ) );
           }
+
+          // record 
+          if( times != NULL ) {
+          
+             times[i - path_optind] = md_timespec_diff( &ts_end, &ts_begin );
+          }
        }
    }
    
    UG_shutdown( ug );
+
+   if( times != NULL ) {
+    
+      printf("@@@@@");
+      for( int i = path_optind; i < argc - 1; i++ ) {
+         printf("%" PRIu64 ",", times[i - path_optind] );
+      }
+      printf("%" PRIu64 "@@@@@\n", times[argc - 1 - path_optind] );
+
+      SG_safe_free( times );
+   }
    exit(rc);
 }

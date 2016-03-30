@@ -16,7 +16,7 @@
 
 #include "syndicate-put.h"
 
-#define BUF_SIZE 4096
+#define BUF_SIZE 1024 * 1024 * 10
 
 // entry point 
 int main( int argc, char** argv ) {
@@ -28,9 +28,14 @@ int main( int argc, char** argv ) {
    int path_optind = 0;
    char* file_path = NULL;
    int fd = 0;
-   char buf[BUF_SIZE];
+   char* buf = NULL;
    ssize_t nr = 0;
    UG_handle_t* fh = NULL;
+
+   int t = 0;
+   struct timespec ts_begin;
+   struct timespec ts_end;
+   int64_t* times = NULL;
 
    mode_t um = umask(0);
    umask( um );
@@ -39,10 +44,10 @@ int main( int argc, char** argv ) {
    
    memset( &opts, 0, sizeof(tool_opts) );
    
-   rc = parse_args( argc, argv, &opts );
-   if( rc != 0 ) {
+   argc = parse_args( argc, argv, &opts );
+   if( argc < 0 ) {
       
-      usage( argv[0], "local_file syndicate_file" );
+      usage( argv[0], "local_file syndicate_file [local_file syndicate_file...]" );
       md_common_usage();
       exit(1);
    }
@@ -59,97 +64,134 @@ int main( int argc, char** argv ) {
    
    // get the path...
    path_optind = SG_gateway_first_arg_optind( gateway );
-   if( path_optind == argc ) {
+   if( path_optind == argc || ((argc - path_optind) % 2) != 0 ) {
       
-      usage( argv[0], "local_file syndicate_file" );
+      usage( argv[0], "local_file syndicate_file[ local_file syndicate_file]" );
       UG_shutdown( ug );
       exit(1);
    }
-  
-   // get the file path...
-   file_path = argv[ path_optind ];
     
-   // get the syndicate path...
-   path_optind++;
-   path = argv[path_optind];
-
-   // get the file...
-   fd = open( file_path, O_RDONLY );
-   if( fd < 0 ) {
-      rc = -errno;
-      fprintf(stderr, "Failed to open '%s': %s\n", file_path, strerror(-rc));
-      rc = 1;
-      goto put_end;
+   if( opts.benchmark ) {
+      times = SG_CALLOC( int64_t, (argc - path_optind) / 2 + 1 );
+      if( times == NULL ) {
+          UG_shutdown( ug );
+          SG_error("%s", "Out of memory\n");
+          exit(1);
+      }
    }
+
+   buf = SG_CALLOC( char, BUF_SIZE );
+   if( buf == NULL ) {
+      UG_shutdown( ug );
+      SG_error("%s", "Out of memory\n");
+      exit(1);
+   }
+
+   for( int i = path_optind; i < argc; i += 2 ) {
+
+       // get the file path...
+       file_path = argv[i];
     
-   // try to create
-   fh = UG_create( ug, path, 0540, &rc );
-   if( rc != 0 ) {
-        
-      if( rc != -EEXIST ) { 
-          fprintf(stderr, "Failed to create '%s' (%d): %s\n", path, rc, strerror( abs(rc) ) );
+       // get the syndicate path...
+       path = argv[i+1];
+
+       // get the file...
+       fd = open( file_path, O_RDONLY );
+       if( fd < 0 ) {
+          rc = -errno;
+          fprintf(stderr, "Failed to open '%s': %s\n", file_path, strerror(-rc));
           rc = 1;
           goto put_end;
-      }
-      else {
+       }
+    
+       // try to create
+       fh = UG_create( ug, path, 0540, &rc );
+       if( rc != 0 ) {
+        
+          if( rc != -EEXIST ) { 
+              fprintf(stderr, "Failed to create '%s' (%d): %s\n", path, rc, strerror( abs(rc) ) );
+              rc = 1;
+              goto put_end;
+          }
+          else {
          
-         // already exists.  open
-         fh = UG_open( ug, path, O_WRONLY, &rc );
-         if( rc != 0 ) {
-            fprintf(stderr, "Failed to open '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
-            rc = 1;
-            goto put_end;
-         }
-      }
-   }
+             // already exists.  open
+             fh = UG_open( ug, path, O_WRONLY, &rc );
+             if( rc != 0 ) {
+                fprintf(stderr, "Failed to open '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
+                rc = 1;
+                goto put_end;
+             }
+          }
+       }
 
-   // write the file
-   while( 1 ) {
-      nr = read( fd, buf, 4096 );
-      if( nr == 0 ) {
-         break;
-      }
-      if( nr < 0 ) {
-         rc = -errno;
-         fprintf(stderr, "Failed to read '%s': %s\n", file_path, strerror( abs(rc) ) );
-         break;
-      }
+       while( 1 ) {
+          nr = read( fd, buf, BUF_SIZE );
+          if( nr == 0 ) {
+             break;
+          }
+          if( nr < 0 ) {
+             rc = -errno;
+             fprintf(stderr, "Failed to read '%s': %s\n", file_path, strerror(abs(rc)));
+             break;
+          }
 
-      rc = UG_write( ug, buf, nr, fh );
-      if( rc < 0 ) {
+          rc = UG_write( ug, buf, nr, fh );
+          if( rc < 0 ) {
+             fprintf(stderr, "Failed to write '%s': %d %s\n", path, rc, strerror(abs(rc)));
+             break;
+          }
+       }
 
-         fprintf(stderr, "Failed to write '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
-         break;
-      }
-   }
+       close( fd );
 
-   close( fd );
+       if( rc < 0 ) {
+          rc = 1;
+          goto put_end;
+       }
 
-   if( rc < 0 ) {
-      rc = 1;
-      goto put_end;
-   }
+       // sync 
+       clock_gettime( CLOCK_MONOTONIC, &ts_begin );
+       rc = UG_fsync( ug, fh );
+       clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
-   // sync 
-   rc = UG_fsync( ug, fh );
-   if( rc < 0 ) {
+       if( rc < 0 ) {
          
-      fprintf(stderr, "Failed to fsync '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
-      rc = 1;
-      goto put_end;
-   }
+          fprintf(stderr, "Failed to fsync '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
+          rc = 1;
+          goto put_end;
+       }
 
-   // close 
-   rc = UG_close( ug, fh );
-   if( rc != 0 ) {
-      fprintf(stderr, "Failed to close '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
-      rc = 1;
-      goto put_end;
-   } 
+       // close 
+       rc = UG_close( ug, fh );
+       if( rc != 0 ) {
+          fprintf(stderr, "Failed to close '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
+          rc = 1;
+          goto put_end;
+       } 
+
+       if( times != NULL ) {
+          printf("\n%ld.%ld - %ld.%ld = %ld\n", ts_end.tv_sec, ts_end.tv_nsec, ts_begin.tv_sec, ts_begin.tv_nsec, md_timespec_diff_ms( &ts_end, &ts_begin ));
+          times[t] = md_timespec_diff_ms( &ts_end, &ts_begin );
+          t++;
+       }
+   }
 
 put_end:
 
    UG_shutdown( ug );
+   SG_safe_free( buf );
+
+   if( times != NULL ) {
+    
+      printf("@@@@@");
+      for( int i = 0; i < t - 1; i++ ) {
+         printf("%" PRId64 ",", times[i] );
+      }
+      printf("%" PRId64 "@@@@@\n", times[t-1] );
+
+      SG_safe_free( times );
+   }
 
    if( rc != 0 ) {
       exit(1);

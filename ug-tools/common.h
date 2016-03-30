@@ -23,6 +23,7 @@
 struct tool_opts {
     
     bool anonymous;        // run as an anonymous user?
+    bool benchmark;        // if true, gather benchmark stats
 };
 
 int print_entry( struct md_entry* dirent );

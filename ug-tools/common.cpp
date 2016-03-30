@@ -34,15 +34,29 @@ int print_entry( struct md_entry* dirent ) {
 }
 
 
+// shift args down 
+static int shift_args( int argc, char** argv, int index ) {
+
+   for( int i = index; i < argc - 1; i++ ) {
+      argv[i] = argv[i+1];
+   }
+
+   argv[argc-1] = NULL;
+   return argc - 1;
+}
+
 // parse args for common tool options
+// consume options that apply to the tool
+// return the new argc
 int parse_args( int argc, char** argv, struct tool_opts* opts ) {
     
    static struct option tool_options[] = {
       {"anonymous",       no_argument,   0, 'A'},
+      {"benchmark",       no_argument,   0, 'B'},
       {0, 0, 0, 0}
    };
 
-   char const* optstr = "A";
+   char const* optstr = "AB";
    int c = 0;
    int opt_index = 0;
    
@@ -69,9 +83,16 @@ int parse_args( int argc, char** argv, struct tool_opts* opts ) {
            
            case 'A': {
                opts->anonymous = true;
+               argc = shift_args( argc, argv, optind - 1 );
                break;
            }
            
+           case 'B': {
+               opts->benchmark = true;
+               argc = shift_args( argc, argv, optind - 1 );
+               break;
+           }
+
            default: {
                
                break;
@@ -84,12 +105,12 @@ int parse_args( int argc, char** argv, struct tool_opts* opts ) {
    optind = 0;
    opterr = 0;
    
-   return 0;
+   return argc;
 }
 
 // usage 
 int usage( char const* progname, char const* args ) {
     
-    printf("Usage: %s [syndicate arguments] [-A|--anonymous] %s\n", progname, args);
+    printf("Usage: %s [syndicate arguments] [-A|--anonymous] [-B|--benchmark] %s\n", progname, args);
     return 0;
 }

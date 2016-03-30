@@ -16,6 +16,8 @@
 
 #include "syndicate-put.h"
 
+#define BUF_SIZE 1024 * 1024 * 1024     // 1 GB
+
 // entry point 
 int main( int argc, char** argv ) {
    
@@ -29,6 +31,10 @@ int main( int argc, char** argv ) {
    int close_rc = 0;
    UG_handle_t* fh = NULL;
 
+   struct timespec ts_begin;
+   struct timespec ts_end;
+   int64_t* times = NULL;
+
    mode_t um = umask(0);
    umask( um );
    
@@ -36,8 +42,8 @@ int main( int argc, char** argv ) {
    
    memset( &opts, 0, sizeof(tool_opts) );
    
-   rc = parse_args( argc, argv, &opts );
-   if( rc != 0 ) {
+   argc = parse_args( argc, argv, &opts );
+   if( argc < 0 ) {
       
       usage( argv[0], "file [file...]" );
       md_common_usage();
@@ -64,13 +70,22 @@ int main( int argc, char** argv ) {
    }
 
    // make a read buffer (1 MB chunks should be fine) 
-   buf = SG_CALLOC( char, 1024 * 1024 );
+   buf = SG_CALLOC( char, BUF_SIZE );
    if( buf == NULL ) {
 
       fprintf(stderr, "Out of memory\n");
       exit(1);
    }
- 
+
+   if( opts.benchmark ) {
+      times = SG_CALLOC( int64_t, argc - path_optind + 1 );
+      if( times == NULL ) {
+          UG_shutdown( ug );
+          SG_error("%s", "Out of memory\n");
+          exit(1);
+      }
+   }
+
    for( int i = path_optind; i < argc; i++ ) {
 
       path = argv[i];
@@ -84,9 +99,10 @@ int main( int argc, char** argv ) {
       }
 
       // try to read 
+      clock_gettime( CLOCK_MONOTONIC, &ts_begin );
       nr = 0;
       while( 1 ) {
-          nr = UG_read( ug, buf, 1024 * 1024, fh );
+          nr = UG_read( ug, buf, BUF_SIZE, fh );
           if( nr < 0 ) {
     
              fprintf(stderr, "%s: read: %s\n", path, strerror(-nr));
@@ -103,9 +119,13 @@ int main( int argc, char** argv ) {
 
           SG_debug("Read %zd bytes\n", nr );
 
-          fwrite( buf, 1, nr, stdout );
-          fflush( stdout );
+          if( !opts.benchmark ) {
+              fwrite( buf, 1, nr, stdout );
+              fflush( stdout );
+          }
       }
+
+      clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
       // close up 
       close_rc = UG_close( ug, fh );
@@ -118,11 +138,26 @@ int main( int argc, char** argv ) {
       if( rc != 0 ) {
          break;
       }
+
+      if( times != NULL ) {
+         times[i - path_optind] = md_timespec_diff_ms( &ts_end, &ts_begin );
+      }
    }
 
 cat_end:
    SG_safe_free(buf );
    UG_shutdown( ug );
+
+   if( times != NULL ) {
+    
+      printf("@@@@@");
+      for( int i = path_optind; i < argc - 1; i++ ) {
+         printf("%" PRIu64 ",", times[i - path_optind] );
+      }
+      printf("%" PRIu64 "@@@@@\n", times[argc - 1 - path_optind] );
+
+      SG_safe_free( times );
+   }
 
    if( rc != 0 ) {
       exit(1);
