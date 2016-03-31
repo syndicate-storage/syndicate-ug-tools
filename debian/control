@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Zack Williams, University of Arizona <zdw@cs.arizona.edu>
 Standards-Version: 3.9.5
-Build-Depends: debhelper (>= 9), libattr1-dev, libfuse-dev, pkg-config, libsyndicate1-dev, libsyndicate-ug1-dev, libfskit1-dev, libfskit-fuse1-dev, libprotobuf-dev, libcurl4-gnutls-dev, libmicrohttpd-dev, libssl-dev, libjson0-dev
+Build-Depends: debhelper (>= 9), pkg-config, libsyndicate1-dev, libsyndicate-ug1-dev, libfskit1-dev,  libprotobuf-dev, libcurl4-gnutls-dev 
 
 Package: syndicate-ug-tools
 Architecture: any
