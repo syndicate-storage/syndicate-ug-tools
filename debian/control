@@ -1,0 +1,14 @@
+Source: syndicate-ug-tools
+Section: utils
+Priority: optional
+Maintainer: Zack Williams, University of Arizona <zdw@cs.arizona.edu>
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9), libattr1-dev, libfuse-dev, pkg-config, libsyndicate1-dev, libsyndicate-ug1-dev, libfskit1-dev, libfskit-fuse1-dev, libprotobuf-dev, libcurl4-gnutls-dev, libmicrohttpd-dev, libssl-dev, libjson0-dev
+
+Package: syndicate-ug-tools
+Architecture: any
+Depends:  ${shlibs:Depends}, ${misc:Depends}
+Description: Syndicate User Gateway Tools
+ This is a collection of one-off tools that carry out various filesystem
+ operations. Each tool is a miniature user gateway for Syndicate.
+

@@ -1,6 +1,6 @@
 # build environment
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUILD    ?= $(ROOT_DIR)/build/out
+BUILD    ?= $(ROOT_DIR)/build
 DISTRO   ?= DEBIAN
 BUILD_BINDIR := $(BUILD)/bin
 BUILD_LIBDIR := $(BUILD)/lib
@@ -8,13 +8,13 @@ BUILD_LIBEXEC_DIR := $(BUILD)/lib/syndicate
 BUILD_INCLUDEDIR := $(BUILD)/include/
 
 # install environment
+DESTDIR        ?=
 PREFIX         ?= /usr/local
-DESTDIR			?= /
-BINDIR         ?= $(PREFIX)/bin
-LIBDIR         ?= $(PREFIX)/lib
-LIBEXECDIR     ?= $(PREFIX)/lib/syndicate
-INCLUDEDIR     ?= $(PREFIX)/include
-PKGCONFIGDIR   ?= $(PREFIX)/lib/pkgconfig
+BINDIR         ?= $(DESTDIR)$(PREFIX)/bin
+LIBDIR         ?= $(DESTDIR)$(PREFIX)/lib
+LIBEXECDIR     ?= $(DESTDIR)$(PREFIX)/lib/syndicate
+INCLUDEDIR     ?= $(DESTDIR)$(PREFIX)/include
+PKGCONFIGDIR   ?= $(DESTDIR)$(PREFIX)/lib/pkgconfig
 
 # user gateway 
 BUILD_UG_TOOLS    := $(BUILD_BINDIR)
