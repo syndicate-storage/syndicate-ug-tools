@@ -35,7 +35,7 @@ int main( int argc, char** argv ) {
    argc = parse_args( argc, argv, &opts );
    if( argc < 0 ) {
       
-      usage( argv[0], "dir [dir...]" );
+      usage( argv[0], "path [path...]" );
       md_common_usage();
       exit(1);
    }
@@ -54,7 +54,7 @@ int main( int argc, char** argv ) {
    path_optind = SG_gateway_first_arg_optind( gateway );
    if( path_optind == argc ) {
       
-      usage( argv[0], "dir [dir...]" );
+      usage( argv[0], "path [path...]" );
       md_common_usage();
       UG_shutdown( ug );
       exit(1);
