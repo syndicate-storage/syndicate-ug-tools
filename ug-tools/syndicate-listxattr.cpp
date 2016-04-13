@@ -122,7 +122,8 @@ int main( int argc, char** argv ) {
             break;
         }
         if( rc != 0 ) {
-            continue;
+           rc = 1;
+           break;
         }
 
         clock_gettime( CLOCK_MONOTONIC, &ts_end );
@@ -153,5 +154,5 @@ int main( int argc, char** argv ) {
    }
 
    UG_shutdown( ug );
-   exit(0);
+   exit(rc);
 }
