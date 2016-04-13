@@ -24,8 +24,6 @@ int main( int argc, char** argv ) {
    struct SG_gateway* gateway = NULL;
    char* path = NULL;
    int path_optind = 0;
-   mode_t um = umask(0);
-   umask( um );
    int64_t* times = NULL;
    struct timespec ts_begin;
    struct timespec ts_end;
@@ -76,7 +74,7 @@ int main( int argc, char** argv ) {
        
        // try to create 
        clock_gettime( CLOCK_MONOTONIC, &ts_begin );
-       UG_handle_t* fh = UG_create( ug, path, um & 0777, &rc );
+       UG_handle_t* fh = UG_create( ug, path, 0550, &rc );
        clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
        if( rc != 0 ) {
