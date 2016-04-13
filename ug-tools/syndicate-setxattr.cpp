@@ -52,10 +52,10 @@ int main( int argc, char** argv ) {
    
    gateway = UG_state_gateway( ug );
    
-   // get the directory path 
+   // get the path 
    path_optind = SG_gateway_first_arg_optind( gateway );
-   if( path_optind + 2 >= argc || (path_optind) % 2 != 0 ) {
-      
+   if( path_optind + 2 >= argc || (path_optind) % 2 == 0 ) {
+     
       usage( argv[0], "path xattr value [xattr value...]" );
       md_common_usage();
       UG_shutdown( ug );
@@ -81,9 +81,13 @@ int main( int argc, char** argv ) {
         clock_gettime( CLOCK_MONOTONIC, &ts_begin );
 
         rc = UG_setxattr( ug, path, xattr_name, xattr_value, strlen(xattr_value), 0 );
-        if( rc != 0 ) {
+        if( rc < 0 ) {
            fprintf(stderr, "Failed to setxattr '%s' '%s' = '%s': %s\n", path, xattr_name, xattr_value, strerror(abs(rc)) );
+           rc = 1;
            break;
+        }
+        else {
+           rc = 0;
         }
 
         clock_gettime( CLOCK_MONOTONIC, &ts_end );
@@ -105,5 +109,5 @@ int main( int argc, char** argv ) {
    }
 
    UG_shutdown( ug );
-   exit(0);
+   exit(rc);
 }
