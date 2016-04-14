@@ -126,6 +126,36 @@ int main( int argc, char** argv ) {
       }
 
       clock_gettime( CLOCK_MONOTONIC, &ts_end );
+      
+      // try to read 
+      clock_gettime( CLOCK_MONOTONIC, &ts_begin );
+      nr = 0;
+      while( 1 ) {
+          nr = UG_read( ug, buf, BUF_SIZE, fh );
+          if( nr < 0 ) {
+    
+             fprintf(stderr, "%s: read: %s\n", path, strerror(-nr));
+             rc = nr;
+             break;
+          }
+          if( nr == 0 ) {
+
+             // EOF
+             SG_debug("EOF on %s\n", path ); 
+             rc = 0;
+             break;
+          }
+
+          SG_debug("Read %zd bytes\n", nr );
+
+          if( !opts.benchmark ) {
+              fwrite( buf, 1, nr, stdout );
+              fflush( stdout );
+          }
+      }
+
+      clock_gettime( CLOCK_MONOTONIC, &ts_end );
+
 
       // close up 
       close_rc = UG_close( ug, fh );
