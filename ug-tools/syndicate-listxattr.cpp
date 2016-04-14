@@ -27,6 +27,7 @@ int main( int argc, char** argv ) {
    struct tool_opts opts;
    ssize_t sz = 0;
    ssize_t sz2 = 0;
+   off_t offset = 0;
   
    uint64_t* times = NULL; 
    struct timespec ts_begin;
@@ -129,9 +130,9 @@ int main( int argc, char** argv ) {
         clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
         if( buf != NULL ) {
-            for( int i = 0; i < sz2; i++ ) {
-                printf("%s\n", buf);
-                buf += strlen(buf) + 1;
+            for( offset = 0; offset < sz2; ) {
+                printf("%s\n", buf + offset);
+                offset += strlen(buf + offset) + 1;
             }
         }
 
