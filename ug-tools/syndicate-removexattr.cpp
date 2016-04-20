@@ -80,7 +80,7 @@ int main( int argc, char** argv ) {
         clock_gettime( CLOCK_MONOTONIC, &ts_begin );
 
         rc = UG_removexattr( ug, path, xattr );
-        if( rc != 0 ) {
+        if( rc < 0 ) {
            fprintf(stderr, "Failed to removexattr '%s' '%s': %s\n", path, xattr, strerror(abs(rc)) );
            rc = 1;
            break;
