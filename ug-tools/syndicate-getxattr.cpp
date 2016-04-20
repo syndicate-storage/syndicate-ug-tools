@@ -117,24 +117,28 @@ int main( int argc, char** argv ) {
                   continue;
                }
 
-               fprintf(stderr, "Failed to getxattr '%s' '%s': %s\n", path, xattr, strerror(abs(sz)) );
+               fprintf(stderr, "Failed to getxattr '%s' '%s': %s\n", path, xattr, strerror(abs(sz2)) );
                rc = sz;
                break;
             }
 
             break;
         }
-        if( rc != 0 ) {
-            continue;
-        }
 
         clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
-        if( buf != NULL ) {
+        if( buf != NULL && rc > 0 ) {
            printf("%s\n", buf );
         }
 
+        if( rc < 0 ) {
+            // abort
+            rc = 1;
+            break;
+        }
+
         SG_safe_free( buf );
+        buf = NULL;
 
         if( times != NULL ) {
             times[i - path_optind] = md_timespec_diff( &ts_end, &ts_begin );
@@ -153,5 +157,5 @@ int main( int argc, char** argv ) {
    }
 
    UG_shutdown( ug );
-   exit(0);
+   exit(rc);
 }
