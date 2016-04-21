@@ -106,6 +106,7 @@ int main( int argc, char** argv ) {
             if( sz2 > sz ) {
                SG_debug("Range expanded (from %zd to %zd)\n", sz, sz2); 
                sz2 = -ERANGE;
+               SG_safe_free(buf);
             }
 
             if( sz2 < 0 ) {
@@ -119,15 +120,17 @@ int main( int argc, char** argv ) {
 
                fprintf(stderr, "Failed to getxattr '%s' '%s': %s\n", path, xattr, strerror(abs(sz2)) );
                rc = sz;
+               SG_safe_free(buf);
                break;
             }
 
+            rc = 0;
             break;
         }
 
         clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
-        if( buf != NULL && rc > 0 ) {
+        if( buf != NULL && sz2 > 0 ) {
            printf("%s\n", buf );
         }
 
