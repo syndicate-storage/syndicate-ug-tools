@@ -30,6 +30,7 @@ int main( int argc, char** argv ) {
    int fd = 0;
    char* buf = NULL;
    ssize_t nr = 0;
+   ssize_t total = 0;
    UG_handle_t* fh = NULL;
 
    int t = 0;
@@ -89,6 +90,8 @@ int main( int argc, char** argv ) {
 
    for( int i = path_optind; i < argc; i += 2 ) {
 
+       total = 0;
+
        // get the file path...
        file_path = argv[i];
     
@@ -141,6 +144,8 @@ int main( int argc, char** argv ) {
              fprintf(stderr, "Failed to write '%s': %d %s\n", path, rc, strerror(abs(rc)));
              break;
           }
+
+          total += nr;
        }
 
        close( fd );
@@ -175,6 +180,8 @@ int main( int argc, char** argv ) {
           times[t] = md_timespec_diff_ms( &ts_end, &ts_begin );
           t++;
        }
+
+       SG_debug("Wrote %zd bytes for %s\n", total, path );
    }
 
 put_end:
