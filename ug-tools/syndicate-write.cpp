@@ -118,6 +118,7 @@ int main( int argc, char** argv ) {
             break;
          }
 
+         SG_debug("Write %zd bytes\n", nr);
          rc = UG_write( ug, buf, nr, fh );
          if( rc < 0 ) {
 
