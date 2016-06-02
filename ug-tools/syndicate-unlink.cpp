@@ -61,6 +61,7 @@ int main( int argc, char** argv ) {
         path = argv[ i ];
         
         // try to unlink
+        SG_debug("unlink '%s'\n", path);
         rc = UG_unlink( ug, path );
         if( rc != 0 ) {
             
