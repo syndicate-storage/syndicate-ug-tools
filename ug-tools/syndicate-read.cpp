@@ -32,6 +32,7 @@ int main( int argc, char** argv ) {
    uint64_t len = 0;
    char* tmp = NULL;
    uint64_t num_read = 0;
+   char debug_buf[52];
 
    mode_t um = umask(0);
    umask( um );
@@ -115,7 +116,7 @@ int main( int argc, char** argv ) {
       nr = 0;
       num_read = 0;
       while( num_read < len ) {
-          nr = UG_read( ug, buf + nr, len - nr, fh );
+          nr = UG_read( ug, buf, len, fh );
           if( nr < 0 ) {
     
              fprintf(stderr, "%s: read: %s\n", path, strerror(-nr));
@@ -130,7 +131,15 @@ int main( int argc, char** argv ) {
              break;
           }
 
-          SG_debug("Read %zd bytes\n", nr );
+          memset(debug_buf, 0, 52);
+          for( int i = 0; i < (50 / 3) && i < nr; i++ ) {
+             char nbuf[5];
+             memset(nbuf, 0, 5);
+             snprintf(nbuf, 4, " %02X", buf[i]);
+             strcat(debug_buf, nbuf);
+          }
+             
+          SG_debug("Read %zd bytes (%s...)\n", nr, debug_buf );
 
           fwrite( buf, 1, nr, stdout );
           fflush( stdout );
