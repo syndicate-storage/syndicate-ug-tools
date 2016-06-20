@@ -16,6 +16,8 @@
 
 #include "syndicate-read.h"
 
+#define BUF_LEN 1024000
+
 // entry point 
 int main( int argc, char** argv ) {
    
@@ -24,7 +26,7 @@ int main( int argc, char** argv ) {
    struct SG_gateway* gateway = NULL;
    char* path = NULL;
    int path_optind = 0;
-   char* buf = NULL;
+   char buf[BUF_LEN]; 
    ssize_t nr = 0;
    int close_rc = 0;
    UG_handle_t* fh = NULL;
@@ -93,19 +95,11 @@ int main( int argc, char** argv ) {
          exit(1);
       }
 
-      buf = SG_CALLOC( char, len );
-      if( buf == NULL ) {
-         fprintf(stderr, "Out of memory\n");
-         UG_shutdown(ug);
-         exit(1);
-      }
-
       // try to open...
       fh = UG_open( ug, path, O_RDONLY, &rc );
       if( rc != 0 ) {
 
          fprintf(stderr, "Failed to open %s: %s\n", path, strerror(-rc));
-         SG_safe_free( buf );
          goto read_end;
       }
 
@@ -116,7 +110,7 @@ int main( int argc, char** argv ) {
       nr = 0;
       num_read = 0;
       while( num_read < len ) {
-          nr = UG_read( ug, buf, len, fh );
+          nr = UG_read( ug, buf, BUF_LEN, fh );
           if( nr < 0 ) {
     
              fprintf(stderr, "%s: read: %s\n", path, strerror(-nr));
@@ -138,7 +132,7 @@ int main( int argc, char** argv ) {
              snprintf(nbuf, 4, " %02X", buf[i]);
              strcat(debug_buf, nbuf);
           }
-             
+          
           SG_debug("Read %zd bytes (%s...)\n", nr, debug_buf );
 
           fwrite( buf, 1, nr, stdout );
@@ -147,8 +141,6 @@ int main( int argc, char** argv ) {
           num_read += nr;
       }
       
-      SG_safe_free( buf );
-
       // close up 
       close_rc = UG_close( ug, fh );
       if( close_rc < 0 ) {
