@@ -27,6 +27,8 @@ int main( int argc, char** argv ) {
    mode_t um = umask(0);
    umask( um );
 
+   mode_t mode = ~um;
+
    struct timespec ts_begin;
    struct timespec ts_end;
    int64_t* times = NULL;
@@ -77,7 +79,7 @@ int main( int argc, char** argv ) {
         
        // try to mkdir 
        clock_gettime( CLOCK_MONOTONIC, &ts_begin );
-       rc = UG_mkdir( ug, path, um & 0777 );
+       rc = UG_mkdir( ug, path, mode & 0777 );
        clock_gettime( CLOCK_MONOTONIC, &ts_end );
 
        if( rc != 0 ) {
