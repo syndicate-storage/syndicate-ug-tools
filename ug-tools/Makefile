@@ -12,7 +12,8 @@ TOOL_NAMES := syndicate-ls syndicate-mkdir syndicate-rmdir syndicate-touch \
   			  syndicate-put syndicate-cat syndicate-vacuum syndicate-unlink \
 			  syndicate-trunc syndicate-write syndicate-read syndicate-coord \
 			  syndicate-rename syndicate-stat syndicate-listxattr syndicate-getxattr \
-			  syndicate-setxattr syndicate-removexattr syndicate-refresh
+			  syndicate-setxattr syndicate-removexattr syndicate-refresh \
+			  syndicate-repl
 
 TOOLS := $(patsubst %,$(BUILD_UG_TOOLS)/%,$(TOOL_NAMES))
 TOOLS_INSTALL := $(patsubst %,$(BINDIR)/%,$(TOOL_NAMES))
