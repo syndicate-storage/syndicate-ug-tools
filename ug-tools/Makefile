@@ -13,7 +13,7 @@ TOOL_NAMES := syndicate-ls syndicate-mkdir syndicate-rmdir syndicate-touch \
 			  syndicate-trunc syndicate-write syndicate-read syndicate-coord \
 			  syndicate-rename syndicate-stat syndicate-listxattr syndicate-getxattr \
 			  syndicate-setxattr syndicate-removexattr syndicate-refresh \
-			  syndicate-repl
+			  syndicate-repl syndicate-get
 
 TOOLS := $(patsubst %,$(BUILD_UG_TOOLS)/%,$(TOOL_NAMES))
 TOOLS_INSTALL := $(patsubst %,$(BINDIR)/%,$(TOOL_NAMES))
@@ -39,7 +39,7 @@ $(BUILD_UG_TOOLS)/$(OBJDIR)/%.o : %.cpp
 clean:
 	rm -f $(OBJ) $(TOOLS)
 
-.PHONY: install 
+.PHONY: install
 install: $(TOOLS_INSTALL)
 
 $(BINDIR)/%: $(BUILD_UG_TOOLS)/%
