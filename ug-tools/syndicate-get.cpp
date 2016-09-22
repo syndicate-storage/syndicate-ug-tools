@@ -67,7 +67,7 @@ int main( int argc, char** argv ) {
    path_optind = SG_gateway_first_arg_optind( gateway );
    if( path_optind == argc || ((argc - path_optind) % 2) != 0 ) {
 
-      usage( argv[0], "syndicate_file local_file[ syndicate_file local_file]" );
+      usage( argv[0], "syndicate_file local_file [syndicate_file local_file]" );
       UG_shutdown( ug );
       exit(1);
    }
@@ -99,7 +99,7 @@ int main( int argc, char** argv ) {
        file_path = argv[i+1];
 
        // open the file...
-       fd = open( file_path, O_CREAT | O_EXCL | O_WRONLY );
+       fd = open( file_path, O_CREAT | O_EXCL | O_WRONLY, 0600 );
        if( fd < 0 ) {
           rc = -errno;
           fprintf(stderr, "Failed to open '%s': %s\n", file_path, strerror(-rc));
@@ -108,7 +108,7 @@ int main( int argc, char** argv ) {
        }
 
        // try to open
-       fh = UG_open( ug, path, O_WRONLY, &rc );
+       fh = UG_open( ug, path, O_RDONLY, &rc );
        if( rc != 0 ) {
           fprintf(stderr, "Failed to open '%s': %d %s\n", path, rc, strerror( abs(rc) ) );
           rc = 1;
