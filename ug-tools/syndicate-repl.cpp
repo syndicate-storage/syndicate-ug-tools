@@ -658,12 +658,15 @@ int UG_repl_stmt_dispatch( struct UG_repl* repl, struct UG_repl_stmt* stmt ) {
       // path flags 
       if( stmt->argc != 2 ) {
          rc = -EINVAL;
+         SG_error("open argc = %d\n", stmt->argc);
          goto UG_repl_stmt_dispatch_out;
       }
 
       path = stmt->argv[0];
       rc = UG_repl_stmt_parse_uint64( stmt->argv[1], &flags );
       if( rc != 0 ) {
+
+         SG_error("Failed to parse '%s'\n", stmt->argv[1]);
          goto UG_repl_stmt_dispatch_out;
       }
 
@@ -756,6 +759,7 @@ int UG_repl_stmt_dispatch( struct UG_repl* repl, struct UG_repl_stmt* stmt ) {
 
       printf("%d\n", rc);
       printf("%s", buf);
+      fflush(stdout);
       SG_safe_free( buf );
       rc = 0;
    }
@@ -956,6 +960,38 @@ int UG_repl_stmt_dispatch( struct UG_repl* repl, struct UG_repl_stmt* stmt ) {
          goto UG_repl_stmt_dispatch_out;
       }
    }
+   else if( strcmp(stmt->cmd, "ftrunc") == 0 ) {
+
+      // fd newsize
+      if( stmt->argc != 2 ) {
+         rc = -EINVAL;
+         goto UG_repl_stmt_dispatch_out;
+      }
+
+      rc = UG_repl_stmt_parse_uint64( stmt->argv[0], &filedes );
+      if( rc != 0 ) {
+         goto UG_repl_stmt_dispatch_out;
+      }
+
+      fh = UG_repl_filedes_lookup( repl, filedes );
+      if( fh == NULL ) {
+         rc = -EBADF;
+         goto UG_repl_stmt_dispatch_out;
+      }
+
+      rc = UG_repl_stmt_parse_uint64( stmt->argv[1], &size );
+      if( rc != 0 ) {
+         goto UG_repl_stmt_dispatch_out;
+      }
+
+      SG_debug("ftrunc(%" PRIu64 ", %" PRIu64 ")\n", filedes, size);
+      rc = UG_ftruncate( ug, size, fh );
+      SG_debug("ftrunc(%" PRIu64 ", %" PRIu64 ") rc = %d\n", filedes, size, rc );
+
+      if( rc < 0 ) {
+         goto UG_repl_stmt_dispatch_out;
+      }
+   }     
    else if( strcmp(stmt->cmd, "unlink") == 0 ) {
 
       // path 
@@ -1074,7 +1110,9 @@ int UG_repl_stmt_dispatch( struct UG_repl* repl, struct UG_repl_stmt* stmt ) {
          strcat(full_cmd, " ");
       }
 
+      SG_debug("sh -c '%s'\n", full_cmd);
       rc = system(full_cmd);
+      SG_debug("sh -c '%s' rc = %d\n", full_cmd, rc);
 
       if( rc != 0 ) {
          SG_error("system('%s') rc = %d\n", full_cmd, rc );
