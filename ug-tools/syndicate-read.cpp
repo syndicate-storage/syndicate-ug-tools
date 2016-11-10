@@ -65,7 +65,7 @@ int main( int argc, char** argv ) {
    path_optind = SG_gateway_first_arg_optind( gateway );
    if( path_optind == argc ) {
       
-      usage( argv[0], "syndicate_file offset len [syndicate_file offset len...]" );
+      usage( argv[0], "syndicate_file syndicate_file offset len [syndicate_file offset len...]" );
       UG_shutdown( ug );
       exit(1);
    }
@@ -73,7 +73,7 @@ int main( int argc, char** argv ) {
    // sanity check 
    if( (argc - path_optind) % 3 != 0 ) {
 
-      usage( argv[0], "syndicate_file offset len [syndicate_file offset len...]");
+      usage( argv[0], "syndicate_file syndicate_file offset len [syndicate_file offset len...]");
       UG_shutdown( ug );
       exit(1);
    }
@@ -94,6 +94,8 @@ int main( int argc, char** argv ) {
          UG_shutdown(ug);
          exit(1);
       }
+
+      SG_debug("Read: '%s' %" PRIu64 " %" PRIu64 "\n", path, offset, len );
 
       // try to open...
       fh = UG_open( ug, path, O_RDONLY, &rc );
