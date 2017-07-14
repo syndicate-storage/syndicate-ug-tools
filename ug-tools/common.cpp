@@ -14,6 +14,18 @@
    limitations under the License.
 */
 
+/**
+ * @file common.cpp
+ * @author Jude Nelson
+ * @date 9 Mar 2016
+ *
+ * @brief Commonly used functions for syndicate tools
+ *
+ * @author Jude Nelson
+ *
+ * @see common.h
+ */
+
 #include "common.h"
 
 // print a single entry 
@@ -34,7 +46,15 @@ int print_entry( struct md_entry* dirent ) {
 }
 
 
-// shift args down 
+/**
+ * @brief shift args down
+ *
+ * @param argc Arg count
+ * @param argv Arg string
+ * @param index Index to shift
+ *
+ * @return argc - 1
+ */
 static int shift_args( int argc, char** argv, int index ) {
 
    for( int i = index; i < argc - 1; i++ ) {
