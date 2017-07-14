@@ -14,11 +14,24 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-read.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-read tool
+ *
+ * @see syndicate-read.h,
+ * @ref syndicate-read
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-read.h"
 
 #define BUF_LEN 1024000
 
-// entry point 
+/**
+ * @brief syndicate-read entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

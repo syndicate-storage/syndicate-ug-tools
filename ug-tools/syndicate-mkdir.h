@@ -14,6 +14,53 @@
    limitations under the License.
 */
 
+// file documentation
+/**
+ * @file syndicate-mkdir.h
+ * @author Jude Nelson
+ * @date 9 Mar 2016
+ *
+ * @brief syndicate-mkdir header file
+ *
+ * @author Jude Nelson
+ *
+ * @see syndicate-mkdir.cpp,
+ * @ref syndicate-mkdir
+ */
+
+// man page and related pages documentation
+/**
+ * @page syndicate-mkdir
+ * @brief Make directories
+ *
+ * @section synopsis SYNOPSIS
+ * syndicate-mkdir -u USERNAME -v VOLUME_NAME -g GATEWAY_NAME [OPTION]... /DIRECTORY
+ *
+ * @section description DESCRIPTION
+ * Create the DIRECTORY(ies), if they do not already exist.
+ *
+ * @copydetails md_common_usage()
+ *
+ * @section example EXAMPLES
+ * syndicate-mkdir -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" /dir1
+ *
+ * @section author AUTHOR
+ * Written by Jude Nelson
+ *
+ * @section bugs REPORTING BUGS
+ * Online help is available at http://www.syndicate-storage.org
+ *
+ * @section copyright COPYRIGHT
+ *
+ * @copydetails md_print_copywrite()
+ *
+ * @copydetails md_print_license()
+ *
+ * @section see SEE ALSO
+ * syndicate-mkdir.cpp(3)
+ * syndicate-mkdir.h(3)
+ */
+
 #ifndef _SYNDICATE_MKDIR_H_
 #define _SYNDICATE_MKDIR_H_
 

@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-cat.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-cat tool
+ *
+ * @see syndicate-cat.h,
+ * @ref syndicate-cat
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-touch.h"
 
-// entry point 
+/**
+ * @brief syndicate-cat entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

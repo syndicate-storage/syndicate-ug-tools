@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-mkdir.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-mkdir tool
+ *
+ * @see syndicate-mkdir.h,
+ * @ref syndicate-mkdir
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-mkdir.h"
 
-// entry point 
+/**
+ * @brief syndicate-mkdir entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

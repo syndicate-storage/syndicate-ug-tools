@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-coord.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-coord tool
+ *
+ * @see syndicate-coord.h,
+ * @ref syndicate-coord
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-coord.h"
 
-// entry point 
+/**
+ * @brief syndicate-coord entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

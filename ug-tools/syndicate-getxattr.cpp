@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
-#include "syndicate-stat.h"
+/**
+ * @file syndicate-getxattr.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-getxattr tool
+ *
+ * @see syndicate-getxattr.h,
+ * @ref syndicate-getxattr
+ *
+ * @author Jude Nelson
+ */
 
-// entry point 
+#include "syndicate-getxattr.h"
+
+/**
+ * @brief syndicate-getxattr entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

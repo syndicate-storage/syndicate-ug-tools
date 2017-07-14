@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
-#include "syndicate-stat.h"
+/**
+ * @file syndicate-removexattr.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-removexattr tool
+ *
+ * @see syndicate-removexattr.h,
+ * @ref syndicate-removexattr
+ *
+ * @author Jude Nelson
+ */
 
-// entry point 
+#include "syndicate-removexattr.h"
+
+/**
+ * @brief syndicate-removexattr entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

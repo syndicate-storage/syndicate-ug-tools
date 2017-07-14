@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-ls.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-ls tool
+ *
+ * @see syndicate-ls.h,
+ * @ref syndicate-ls
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-ls.h"
 
-// entry point 
+/**
+ * @brief syndicate-ls entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

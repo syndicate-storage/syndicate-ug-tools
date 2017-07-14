@@ -14,11 +14,24 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-put.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-put tool
+ *
+ * @see syndicate-put.h,
+ * @ref syndicate-put
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-put.h"
 
 #define BUF_SIZE 1024 * 1024 * 10
 
-// entry point 
+/**
+ * @brief syndicate-put entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

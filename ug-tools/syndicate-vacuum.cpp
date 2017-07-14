@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-vacuum.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-vacuum tool
+ *
+ * @see syndicate-vacuum.h,
+ * @ref syndicate-vacuum
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-vacuum.h"
 
-// entry point 
+/**
+ * @brief syndicate-vacuum entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

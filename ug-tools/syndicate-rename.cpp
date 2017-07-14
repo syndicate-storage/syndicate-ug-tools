@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-rename.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-rename tool
+ *
+ * @see syndicate-rename.h,
+ * @ref syndicate-rename
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-rename.h"
 
-// entry point 
+/**
+ * @brief syndicate-rename entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

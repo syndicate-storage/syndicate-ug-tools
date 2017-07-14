@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-rmdir.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-rmdir tool
+ *
+ * @see syndicate-rmdir.h,
+ * @ref syndicate-rmdir
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-rmdir.h"
 
-// entry point 
+/**
+ * @brief syndicate-rmdir entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

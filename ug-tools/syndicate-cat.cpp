@@ -14,11 +14,24 @@
    limitations under the License.
 */
 
-#include "syndicate-put.h"
+/**
+ * @file syndicate-cat.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-cat tool
+ *
+ * @see syndicate-cat.h,
+ * @ref syndicate-cat
+ *
+ * @author Jude Nelson
+ */
+
+#include "syndicate-cat.h"
 
 #define BUF_SIZE 1024 * 1024 * 1024     // 1 GB
 
-// entry point 
+/**
+ * @brief syndicate-cat entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

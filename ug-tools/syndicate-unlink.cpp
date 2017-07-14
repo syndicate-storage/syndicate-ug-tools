@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-unlink.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-unlink tool
+ *
+ * @see syndicate-unlink.h,
+ * @ref syndicate-unlink
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-unlink.h"
 
-// entry point 
+/**
+ * @brief syndicate-unlink entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

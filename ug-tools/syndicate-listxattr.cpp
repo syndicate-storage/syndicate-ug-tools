@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
-#include "syndicate-stat.h"
+/**
+ * @file syndicate-listxattr.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-listxattr tool
+ *
+ * @see syndicate-listxattr.h,
+ * @ref syndicate-listxattr
+ *
+ * @author Jude Nelson
+ */
 
-// entry point 
+#include "syndicate-listxattr.h"
+
+/**
+ * @brief syndicate-listxattr entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

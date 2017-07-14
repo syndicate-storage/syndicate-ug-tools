@@ -14,6 +14,53 @@
    limitations under the License.
 */
 
+// file documentation
+/**
+ * @file syndicate-stat.h
+ * @author Jude Nelson
+ * @date 9 Mar 2016
+ *
+ * @brief syndicate-stat header file
+ *
+ * @author Jude Nelson
+ *
+ * @see syndicate-stat.cpp,
+ * @ref syndicate-stat
+ */
+
+// man page and related pages documentation
+/**
+ * @page syndicate-stat
+ * @brief List detailed file or directory inode information
+ *
+ * @section synopsis SYNOPSIS
+ * syndicate-stat -u USERNAME -v VOLUME_NAME -g GATEWAY_NAME [OPTION]... /FILE...
+ *
+ * @section description DESCRIPTION
+ * List detailed information about FILEs or directory inode information
+ *
+ * @copydetails md_common_usage()
+ *
+ * @section example EXAMPLES
+ * syndicate-stat -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" /file1
+ *
+ * @section author AUTHOR
+ * Written by Jude Nelson
+ *
+ * @section bugs REPORTING BUGS
+ * Online help is available at http://www.syndicate-storage.org
+ *
+ * @section copyright COPYRIGHT
+ *
+ * @copydetails md_print_copywrite()
+ *
+ * @copydetails md_print_license()
+ *
+ * @section see SEE ALSO
+ * syndicate-stat.cpp(3)
+ * syndicate-stat.h(3)
+ */
+
 #ifndef _SYNDICATE_STAT_H_
 #define _SYNDICATE_STAT_H_
 

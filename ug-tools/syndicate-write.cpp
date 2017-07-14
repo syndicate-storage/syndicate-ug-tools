@@ -14,11 +14,24 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-write.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-write tool
+ *
+ * @see syndicate-write.h,
+ * @ref syndicate-write
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-write.h"
 
 #define BUF_SIZE 4096
 
-// entry point 
+/**
+ * @brief syndicate-write entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

@@ -14,9 +14,23 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-trunc.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-trunc tool
+ *
+ * @see syndicate-trunc.h,
+ * @ref syndicate-trunc
+ *
+ * @author Jude Nelson
+ */
+
+
 #include "syndicate-trunc.h"
 
-// entry point 
+/**
+ * @brief syndicate-trunc entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

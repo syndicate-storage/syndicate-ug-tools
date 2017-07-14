@@ -14,6 +14,53 @@
    limitations under the License.
 */
 
+// file documentation
+/**
+ * @file syndicate-refresh.h
+ * @author Jude Nelson
+ * @date 9 Mar 2016
+ *
+ * @brief syndicate-refresh header file
+ *
+ * @author Jude Nelson
+ *
+ * @see syndicate-refresh.cpp,
+ * @ref syndicate-refresh
+ */
+
+// man page and related pages documentation
+/**
+ * @page syndicate-refresh
+ * @brief Refresh the dataset
+ *
+ * @section synopsis SYNOPSIS
+ * syndicate-refresh -u USERNAME -v VOLUME_NAME -g GATEWAY_NAME [OPTION]... /DIRECTORY
+ *
+ * @section description DESCRIPTION
+ * Tell syndicate to scan the dataset and refresh the MS
+ *
+ * @copydetails md_common_usage()
+ *
+ * @section example EXAMPLES
+ * syndicate-refresh -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" /file1
+ *
+ * @section author AUTHOR
+ * Written by Jude Nelson
+ *
+ * @section bugs REPORTING BUGS
+ * Online help is available at http://www.syndicate-storage.org
+ *
+ * @section copyright COPYRIGHT
+ *
+ * @copydetails md_print_copywrite()
+ *
+ * @copydetails md_print_license()
+ *
+ * @section see SEE ALSO
+ * syndicate-refresh.cpp(3)
+ * syndicate-refresh.h(3)
+ */
+
 #ifndef _SYNDICATE_REFRESH_H_
 #define _SYNDICATE_REFRESH_H_
 

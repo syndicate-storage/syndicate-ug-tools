@@ -14,6 +14,16 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-repl.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-repl tool
+ *
+ * @see syndicate-repl.h,
+ * @ref syndicate-repl
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-repl.h"
 
 /*
@@ -30,36 +40,53 @@
 #define UG_REPL_ARGC_MAX 10 
 #define UG_REPL_FILE_HANDLE_MAX 1024
 
-// REPL statement
+/**
+ * @brief Information regarding the REPL statement
+ */
 struct UG_repl_stmt {
-   char* cmd;
-   char* argv[UG_REPL_ARGC_MAX+1];
-   int argc;
-
-   char* linebuf;
+   char* cmd; ///< Command string
+   char* argv[UG_REPL_ARGC_MAX+1]; ///< ARGV string
+   int argc; ///< Argument count
+   char* linebuf; ///< Line buffer
 };
 
-// REPL state 
+/**
+ * @brief The REPL state
+ */
 struct UG_repl {
-
-   struct UG_state* ug;
-   UG_handle_t* filedes[ UG_REPL_FILE_HANDLE_MAX ];
-   UG_handle_t* dirdes[ UG_REPL_FILE_HANDLE_MAX ];
+   struct UG_state* ug; ///< State of UG
+   UG_handle_t* filedes[ UG_REPL_FILE_HANDLE_MAX ]; ///< File descriptor
+   UG_handle_t* dirdes[ UG_REPL_FILE_HANDLE_MAX ]; ///< Directory descriptor
 };
 
 
-// get REPL statement's command
+/**
+ * @brief Get REPL statement's command
+ *
+ * @param[in] stmt The REPL statement
+ * @return The statement command
+ */
 char const* UG_repl_stmt_command( struct UG_repl_stmt* stmt ) {
    return (char const*)stmt->cmd;
 }
 
-// get REPL statement args and count
+/**
+ * @brief Get REPL statement args and count
+ *
+ * @param[in] stmt The REPL statement
+ * @param[in] argc Arg count
+ * @return The statement argv
+ */
 char const** UG_repl_stmt_args( struct UG_repl_stmt* stmt, int* argc ) {
    *argc = stmt->argc;
    return (char const**)stmt->argv;
 }
 
-// free a REPL statement 
+/**
+ * @brief Free a REPL statement
+ *
+ * @param[in] stmt The REPL statement
+ */
 void UG_repl_stmt_free( struct UG_repl_stmt* stmt ) {
    SG_safe_free( stmt->linebuf );
    memset( stmt, 0, sizeof(struct UG_repl_stmt) );
@@ -67,7 +94,12 @@ void UG_repl_stmt_free( struct UG_repl_stmt* stmt ) {
 }
 
 
-// make a repl 
+/**
+ * @brief Make a repl
+ *
+ * @param[in] ug The UG state
+ * @return UG_repl
+ */
 struct UG_repl* UG_repl_new( struct UG_state* ug ) {
    struct UG_repl* repl = SG_CALLOC( struct UG_repl, 1 );
    if( repl == NULL ) {
@@ -78,7 +110,11 @@ struct UG_repl* UG_repl_new( struct UG_state* ug ) {
    return repl;
 }
 
-// free a repl; closing all descriptors as well 
+/**
+ * @brief Free a repl; closing all descriptors as well
+ *
+ * @param[in] repl REPL statement
+ */
 void UG_repl_free( struct UG_repl* repl ) {
 
    int rc = 0;
@@ -119,14 +155,20 @@ void UG_repl_free( struct UG_repl* repl ) {
    return;
 }
           
- 
-// parse a REPL statement from a file stream.
-// Note that we DO NOT ALLOW SPACES between arguments.
-// return the new statement on success, and set *_rc to 0
-// return NULL on failure, and set *_rc to:
-//  -ENOMEM on OOM
-//  -EINVAL on invalid line
-//  -ENODATA on EOF
+
+/**
+ * @brief Parse a REPL statement from a file stream.
+ *
+ * @note NO SPACES between arguments.
+ *
+ * @param[in] input The input file
+ * @param[out] _rc Status
+ *
+ * @retval Statement REPL statement on success
+ * @retval -ENOMEM On OOM
+ * @retval -EINVAL On invalid line
+ * @retval -ENODATA On EOF
+ */
 struct UG_repl_stmt* UG_repl_stmt_parse( FILE* input, int* _rc ) {
 
    ssize_t nr = 0;
@@ -233,9 +275,12 @@ struct UG_repl_stmt* UG_repl_stmt_parse( FILE* input, int* _rc ) {
 }
 
 
-// insert a filedes 
-// return the index (>= 0) on success
-// return -ENFILE if we're out of space
+/**
+ * @brief Insert a filedes 
+ *
+ * @retval index Index >= 0 on success
+ * @retval -ENFILE out of space
+ */
 static int UG_repl_filedes_insert( struct UG_repl* repl, UG_handle_t* fh ) {
 
    for( int i = 0; i < UG_REPL_FILE_HANDLE_MAX; i++ ) {
@@ -249,9 +294,12 @@ static int UG_repl_filedes_insert( struct UG_repl* repl, UG_handle_t* fh ) {
 }
 
 
-// insert a dirdes
-// return the index (>= 0) on success
-// return -ENFILE if we're out of space 
+/**
+ * @brief Insert a dirdes
+ *
+ * @retval index Index >= 0 on success
+ * @retval -ENFILE out of space
+ */
 static int UG_repl_dirdes_insert( struct UG_repl* repl, UG_handle_t* dh ) {
 
    for( int i = 0; i < UG_REPL_FILE_HANDLE_MAX; i++ ) {
@@ -265,9 +313,12 @@ static int UG_repl_dirdes_insert( struct UG_repl* repl, UG_handle_t* dh ) {
 }
 
 
-// clear a filedes by closing it
-// return the result of close on success
-// return -EBADF if there is no handle
+/**
+ * @brief Clear a filedes by closing it
+ *
+ * @retval Status File handle / result of close, on success
+ * @retval -EBADF No handle
+ */
 static int UG_repl_filedes_close( struct UG_repl* repl, int fd ) {
 
    int rc = 0;
@@ -288,9 +339,12 @@ static int UG_repl_filedes_close( struct UG_repl* repl, int fd ) {
 }
 
 
-// clear a dirdes by closing it 
-// return the result of closedir on success 
-// return -EBADF if there was no handle 
+/**
+ * @brief Clear a dirdes by closing it 
+ *
+ * @retval Status Result of closedir on success 
+ * @retval -EBADF No handle
+ */
 static int UG_repl_dirdes_close( struct UG_repl* repl, int dfd ) {
 
    int rc = 0;
@@ -310,10 +364,12 @@ static int UG_repl_dirdes_close( struct UG_repl* repl, int dfd ) {
    return rc;
 }
 
-
-// look up a file descriptor 
-// return it on success
-// return NULL if not present 
+/**
+ * @brief Look up a file descriptor 
+ *
+ * @retval filedes File descriptor on success
+ * @retval NULL Not present
+ */
 static UG_handle_t* UG_repl_filedes_lookup( struct UG_repl* repl, int fd ) {
    
    if( fd < 0 || fd >= UG_REPL_FILE_HANDLE_MAX ) {
@@ -323,10 +379,12 @@ static UG_handle_t* UG_repl_filedes_lookup( struct UG_repl* repl, int fd ) {
    return repl->filedes[fd];
 }
 
-
-// look up a directory descriptor 
-// return it on success
-// return NULL if not present 
+/**
+ * @brief Look up a directory descriptor 
+ *
+ * @retval dirdes Directory descriptor on success
+ * @retval NULL Not present
+ */
 static UG_handle_t* UG_repl_dirdes_lookup( struct UG_repl* repl, int dfd ) {
 
    if( dfd < 0 || dfd >= UG_REPL_FILE_HANDLE_MAX ) {
@@ -336,10 +394,14 @@ static UG_handle_t* UG_repl_dirdes_lookup( struct UG_repl* repl, int dfd ) {
    return repl->dirdes[dfd];
 }
 
-
-// parse an unsigned int64 
-// return 0 on success and set *ret
-// return -EINVAL on failure 
+/**
+ * @brief Parse an unsigned int64 
+ *
+ * @param[in] str String
+ * @param[out] ret Converted to uint64
+ * @retval 0 Success
+ * @retval -EINVAL Failure 
+ */
 static int UG_repl_stmt_parse_uint64( char* str, uint64_t* ret ) {
 
    char* tmp = NULL;
@@ -351,10 +413,16 @@ static int UG_repl_stmt_parse_uint64( char* str, uint64_t* ret ) {
    return 0;
 }
 
-
-// get user and group IDs--these are always the first two arguments
-// return 0 on success, and set *user_id and *group_id
-// return -EINVAL if this is not possible 
+/**
+ * @brief Get user and group IDs--these are always the first two arguments
+ *
+ * @param[in] stmt REPL statement
+ * @param[out] user User ID
+ * @param[out] group Group ID
+ * @param[in] offset Expected argc offset
+ * @retval 0 Success
+ * @retval -EINVAL Not possible 
+ */
 static int UG_repl_stmt_parse_user_group( struct UG_repl_stmt* stmt, uint64_t* user, uint64_t* group, int offset ) {
 
    int rc = 0;
@@ -376,10 +444,14 @@ static int UG_repl_stmt_parse_user_group( struct UG_repl_stmt* stmt, uint64_t* u
    return 0;
 }
 
-
-// parse mode as an octal string 
-// return 0 on success, and set *mode 
-// return -EINVAL otherwise 
+/**
+ * @brief Parse mode as an octal string 
+ *
+ * @param[in] modearg Mode string
+ * @param[out] mode modearg converted to mode_t
+ * @retval 0 Success
+ * @retval -EINVAL Failed
+ */
 static int UG_repl_stmt_parse_mode( char* modearg, mode_t* mode ) {
 
    char* tmp = NULL;
@@ -391,10 +463,16 @@ static int UG_repl_stmt_parse_mode( char* modearg, mode_t* mode ) {
    return 0;
 }
 
-
-// dispatch a REPL statement
-// return the result of the command
-// return -EINVAL for invalid commands
+/**
+ * @brief Dispatch a REPL statement
+ *
+ * @param[in] repl REPL 
+ * @param[in] stmt REPL statement
+ * @retval 0 Success
+ * @retval -EINVAL Invalid commands
+ * @retval -ENOMEM Out of memory
+ * @retval -EBADF No file descriptor
+ */
 int UG_repl_stmt_dispatch( struct UG_repl* repl, struct UG_repl_stmt* stmt ) {
 
    int rc = 0;
@@ -1133,11 +1211,14 @@ UG_repl_stmt_dispatch_out:
    return rc;
 }
 
-
-// main REPL loop
-// reads commands from the given file until EOF,
-// and dispatches them to the given repl.
-// returns the status of the last line processed
+/**
+ * @brief The REPL loop
+ *
+ * Reads commands from the given file until EOF
+ * and dispatches them to the given repl.
+ *
+ * @return The status of the last line processed
+ */
 int UG_repl_main( struct UG_repl* repl, FILE* f ) {
 
    int rc = 0;
@@ -1170,7 +1251,11 @@ int UG_repl_main( struct UG_repl* repl, FILE* f ) {
 }
 
 
-// reads a string of commands from stdin and feed them to the UG
+/**
+ * @brief The main entry point for syndicate-repl
+ *
+ * Reads a string of commands from stdin and feed them to the UG
+ */
 int main(int argc, char** argv) {
    
    struct UG_repl* repl = NULL;

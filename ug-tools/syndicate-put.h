@@ -14,6 +14,53 @@
    limitations under the License.
 */
 
+// file documentation
+/**
+ * @file syndicate-put.h
+ * @author Jude Nelson
+ * @date 9 Mar 2016
+ *
+ * @brief syndicate-put header file
+ *
+ * @author Jude Nelson
+ *
+ * @see syndicate-put.cpp,
+ * @ref syndicate-put
+ */
+
+// man page and related pages documentation
+/**
+ * @page syndicate-put
+ * @brief Put or copy to the syndicate volume
+ *
+ * @section synopsis SYNOPSIS
+ * syndicate-put -u USERNAME -v VOLUME_NAME -g GATEWAY_NAME [OPTION]... /FILE...
+ *
+ * @section description DESCRIPTION
+ * Put or copy FILE(s) from the local filesystem to the syndicate volume
+ *
+ * @copydetails md_common_usage()
+ *
+ * @section example EXAMPLES
+ * syndicate-put -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" /file1
+ *
+ * @section author AUTHOR
+ * Written by Jude Nelson
+ *
+ * @section bugs REPORTING BUGS
+ * Online help is available at http://www.syndicate-storage.org
+ *
+ * @section copyright COPYRIGHT
+ *
+ * @copydetails md_print_copywrite()
+ *
+ * @copydetails md_print_license()
+ *
+ * @section see SEE ALSO
+ * syndicate-put.cpp(3)
+ * syndicate-put.h(3)
+ */
+
 #ifndef _SYNDICATE_PUT_H_
 #define _SYNDICATE_PUT_H_
 

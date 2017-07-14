@@ -14,11 +14,24 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-get.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-get tool
+ *
+ * @see syndicate-get.h,
+ * @ref syndicate-get
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-get.h"
 
 #define BUF_SIZE 1024 * 1024 * 10
 
-// entry point
+/**
+ * @brief syndicate-get entry point
+ *
+ */
 int main( int argc, char** argv ) {
 
    int rc = 0;

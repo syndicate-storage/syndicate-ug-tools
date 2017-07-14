@@ -14,9 +14,22 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-refresh.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-refresh tool
+ *
+ * @see syndicate-refresh.h,
+ * @ref syndicate-refresh
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-refresh.h"
 
-// entry point 
+/**
+ * @brief syndicate-refresh entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

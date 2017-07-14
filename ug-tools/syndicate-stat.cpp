@@ -14,9 +14,23 @@
    limitations under the License.
 */
 
+/**
+ * @file syndicate-stat.cpp
+ * @brief Contains main() function (i.e. entry point) for the syndicate-stat tool
+ *
+ * @see syndicate-stat.h,
+ * @ref syndicate-stat
+ *
+ * @author Jude Nelson
+ */
+
 #include "syndicate-stat.h"
 
-// entry point 
+
+/**
+ * @brief syndicate-stat entry point
+ *
+ */
 int main( int argc, char** argv ) {
    
    int rc = 0;

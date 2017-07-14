@@ -14,6 +14,53 @@
    limitations under the License.
 */
 
+// file documentation
+/**
+ * @file syndicate-cat.h
+ * @author Jude Nelson
+ * @date 9 Mar 2016
+ *
+ * @brief syndicate-cat header file
+ *
+ * @author Jude Nelson
+ *
+ * @see syndicate-cat.cpp,
+ * @ref syndicate-cat
+ */
+
+// man page and related pages documentation
+/**
+ * @page syndicate-cat
+ * @brief Concatenate files to standard output
+ *
+ * @section synopsis SYNOPSIS
+ * syndicate-cat -u USERNAME -v VOLUME_NAME -g GATEWAY_NAME [OPTION]... /FILE...
+ *
+ * @section description DESCRIPTION
+ * Concatenate FILE(s) in syndicate and print on the standard output.
+ *
+ * @copydetails md_common_usage()
+ *
+ * @section example EXAMPLES
+ * syndicate-cat -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" /file1
+ *
+ * @section author AUTHOR
+ * Written by Jude Nelson
+ *
+ * @section bugs REPORTING BUGS
+ * Online help is available at http://www.syndicate-storage.org
+ *
+ * @section copyright COPYRIGHT
+ *
+ * @copydetails md_print_copywrite()
+ *
+ * @copydetails md_print_license()
+ *
+ * @section see SEE ALSO
+ * syndicate-cat.cpp(3)
+ * syndicate-cat.h(3)
+ */
+
 #ifndef _SYNDICATE_CAT_H_
 #define _SYNDICATE_CAT_H_
 
