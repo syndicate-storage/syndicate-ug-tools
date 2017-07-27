@@ -26,5 +26,6 @@ docs:
 	git submodule init
 	git submodule update
 	mkdir -p docs/sources
-	ln -sf ../../ug-tools docs/sources/ug-tools
+	cp -r ug-tools docs/sources
+	cd docs/sources && git clone https://github.com/syndicate-storage/syndicate-core
 	cd docs && make docs
