@@ -19,4 +19,12 @@ uninstall:
 .PHONY: clean
 clean:
 	$(MAKE) -C ug-tools clean
+	rm -rf docs/*
 
+.PHONY: docs
+docs:
+	git submodule init
+	git submodule update
+	mkdir -p docs/sources
+	ln -sf ../../ug-tools docs/sources/ug-tools
+	cd docs && make docs
