@@ -23,8 +23,7 @@ clean:
 
 .PHONY: docs
 docs:
-	git submodule init
-	git submodule update
+	if [ ! -f docs/Makefile ]; then git submodule init && git submodule update; fi
 	mkdir -p docs/sources
 	if [ ! -d docs/sources/ug-tools ]; then cp -r ug-tools docs/sources; fi
 	if [ ! -d docs/sources/syndicate-core ]; then cd docs/sources && git clone https://github.com/syndicate-storage/syndicate-core; fi
