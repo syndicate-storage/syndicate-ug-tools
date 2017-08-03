@@ -5,3 +5,8 @@ export PREFIX=/usr
 
 %:
 	dh ${@}
+
+override_dh_auto_build:
+	make ug-tools
+	make docs
+	make installman
