@@ -19,7 +19,7 @@ uninstall:
 .PHONY: clean
 clean:
 	$(MAKE) -C ug-tools clean
-	if [ -f docs/Makefile ]; then cd docs && make clean; fi
+	if [ -f docs/Makefile ]; then $(MAKE) -C docs clean; fi
 
 .PHONY: docs
 docs:
@@ -28,4 +28,8 @@ docs:
 	mkdir -p docs/sources
 	if [ ! -d docs/sources/ug-tools ]; then cp -r ug-tools docs/sources; fi
 	if [ ! -d docs/sources/syndicate-core ]; then cd docs/sources && git clone https://github.com/syndicate-storage/syndicate-core; fi
-	cd docs && make docs
+	$(MAKE) -C docs docs
+
+.PHONY: installman
+installman:
+	$(MAKE) -C docs installman
