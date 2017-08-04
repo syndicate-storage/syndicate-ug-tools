@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 export DH_VERBOSE=1
-export PREFIX=/usr
+export PREFIX=debian/syndicate-ug-tools
 
 %:
 	dh ${@}
