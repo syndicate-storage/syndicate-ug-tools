@@ -9,4 +9,7 @@ export PREFIX=/usr
 override_dh_auto_build:
 	make ug-tools
 	make docs
+
+override_dh_auto_binary:
+	make install
 	make installman
