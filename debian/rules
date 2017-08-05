@@ -10,5 +10,5 @@ override_dh_auto_build:
 	make docs
 
 override_dh_auto_install:
-	make install
+	dh_auto_install
 	make installman
