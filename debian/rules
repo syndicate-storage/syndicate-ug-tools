@@ -12,4 +12,4 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	dh_auto_install
-	make installman DESTDIR=debian/syndicate-ug-tools
+	make installman DESTDIR=$(DESTDIR) PREFIX=/usr/share
