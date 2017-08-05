@@ -1,14 +1,15 @@
 #!/usr/bin/make -f
 
 export DH_VERBOSE=1
+export PREFIX=/usr
 
 %:
 	dh ${@}
 
 override_dh_auto_build:
-	make ug-tools
+	dh_auto_build
 	make docs
 
 override_dh_auto_install:
 	dh_auto_install
-	make installman
+	make installman DESTDIR=debian/syndicate-ug-tools

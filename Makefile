@@ -10,6 +10,8 @@ ug-tools:
 
 .PHONY: install
 install:
+	echo DESTDIR=$(DESTDIR)
+	echo PREFIX=$(PREFIX)
 	$(MAKE) -C ug-tools install
 
 .PHONY: uninstall
