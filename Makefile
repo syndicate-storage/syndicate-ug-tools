@@ -27,7 +27,7 @@ docs:
 	mkdir -p docs/sources
 	if [ ! -d docs/sources/ug-tools ]; then cp -r ug-tools docs/sources; fi
 	if [ ! -d docs/sources/syndicate-core ]; then cd docs/sources && git config --global http.sslVerify false && git clone https://github.com/syndicate-storage/syndicate-core; fi
-	cd docs && ./scrapedocs syndicate-ug-tools
+	cd docs && ./scrapedocs ug-tools
 	$(MAKE) -C docs docs
 
 .PHONY: installman
