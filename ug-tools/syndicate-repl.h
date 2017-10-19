@@ -47,6 +47,7 @@
  * syndicate-repl -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" repl_script.txt\n\n
  *
  * Example Script:\n
+
 ```
 create /put-abcde-0 0644
 write 0 0 12 foobarbazgoo
@@ -70,6 +71,7 @@ open /put-abcde-2 2
 read 0 0 12
 close 0
 ```
+
  *
  * @section author AUTHOR
  * Written by Jude Nelson

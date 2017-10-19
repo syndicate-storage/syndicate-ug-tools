@@ -42,7 +42,7 @@
  * @copydetails md_common_usage()
  *
  * @section example EXAMPLES
- * Print the contects of filename between byte 100 and 150\n
+ * Print the contents of filename between byte 100 and 150\n
  * syndicate-read -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" /filename 100 50
 
  * @section author AUTHOR
