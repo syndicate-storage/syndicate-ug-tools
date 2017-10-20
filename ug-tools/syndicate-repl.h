@@ -45,33 +45,28 @@
  *
  * @section example EXAMPLES
  * syndicate-repl -u syndicate@example.com -v syndicate_volume -g syndicate_gateway -d2 -f -c "syndicate.conf" repl_script.txt\n\n
- *
- * Example Script:\n
-
-```
-create /put-abcde-0 0644
-write 0 0 12 foobarbazgoo
-close 0
-trunc /put-abcde-0 6
-open /put-abcde-0 2
-read 0 0 12
-close 0
-create /put-abcde-1 0644
-write 0 0 12 foobarbazgoo
-close 0
-trunc /put-abcde-1 6
-open /put-abcde-1 2
-read 0 0 12
-close 0
-create /put-abcde-2 0644
-write 0 0 12 foobarbazgoo
-close 0
-trunc /put-abcde-2 6
-open /put-abcde-2 2
-read 0 0 12
-close 0
-```
-
+ * Example Script:\n\n
+ * create /put-abcde-0 0644\n
+ * write 0 0 12 foobarbazgoo\n
+ * close 0\n
+ * trunc /put-abcde-0 6\n
+ * open /put-abcde-0 2\n
+ * read 0 0 12\n
+ * close 0\n
+ * create /put-abcde-1 0644\n
+ * write 0 0 12 foobarbazgoo\n
+ * close 0\n
+ * trunc /put-abcde-1 6\n
+ * open /put-abcde-1 2\n
+ * read 0 0 12\n
+ * close 0\n
+ * create /put-abcde-2 0644\n
+ * write 0 0 12 foobarbazgoo\n
+ * close 0\n
+ * trunc /put-abcde-2 6\n
+ * open /put-abcde-2 2\n
+ * read 0 0 12\n
+ * close 0\n
  *
  * @section author AUTHOR
  * Written by Jude Nelson
